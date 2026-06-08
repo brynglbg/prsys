@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist --repo https://github.com/brynglbg/prsys.git"
+    "deploy": "gh-pages -d dist -r https://github.com/brynglbg/prsys.git"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.105.4",
