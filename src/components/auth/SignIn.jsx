@@ -1,13 +1,11 @@
 import { useState } from 'react'
-import { SupabaseServices } from '../../services/SupabaseServices'
 import { useNavigate } from 'react-router-dom'
 import LoadingScreen from '../templates/LoadingScreen'
 import { FcGoogle } from 'react-icons/fc'
 import * as BsIcons from 'react-icons/bs'
+import AuthServices from '../../services/AuthServices'
 
 const SignIn = () => {
-  // const isDev = window.location.hostname === 'localhost';
-  // const redirectTo = isDev ? 'http://localhost:3000' : window.location.origin;
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -19,25 +17,21 @@ const SignIn = () => {
     e.preventDefault()
     setLoading(true)
 
-    const result = await SupabaseServices.auth.signInWithPassword({ email, password })
+    const result = await AuthServices.signIn(email, password)
 
     if (result.error) {
-      setError(result.error.message)
+      setError(result.error)
       setLoading(false)
+      return
     }
   }
   async function signInWithGoogle() {
     setLoading(true)
 
-    const result = await SupabaseServices.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: window.location.origin
-      }
-    })
+    const result = await AuthServices.signInWithGoogle()
 
     if (result.error) {
-      setError(result.error.message)
+      setError(result.error)
       setLoading(false)
     }
   }

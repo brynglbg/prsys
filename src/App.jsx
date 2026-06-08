@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Route, Routes } from 'react-router-dom'
-import { SupabaseServices } from './services/SupabaseServices'
+import { Route, Routes, useLocation } from 'react-router-dom'
 // Protected
 import ProtectedRoute from './routes/ProtectedRoute'
 import Layout from './Layout'
@@ -14,27 +13,23 @@ import SignIn from './components/auth/SignIn'
 import SignOut from './components/auth/SignOut'
 // Error
 import PageNotFound from './components/error/PageNotFound'
+// Templates
 import LoadingScreen from './components/templates/LoadingScreen'
+import { useAuth } from './context/AuthContext'
+import { getPageTitle } from './utils/helpers'
 
 const App = () => {
-  const [session, setSession] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const { session, loading } = useAuth()
+  const location = useLocation()
 
   useEffect(() => {
-    SupabaseServices.auth.getSession().then(({ data }) => {
-      setSession(data.session)
-      setLoading(false)
-    })
-    const { data: listener } = SupabaseServices.auth.onAuthStateChange((e, session) => {
-      setSession(session)
-    })
-    return () => listener.subscription.unsubscribe()
-  }, [])
+    document.title = getPageTitle(location.pathname)
+  }, [location.pathname])
 
   if (loading) return <LoadingScreen />
   return (
     <Routes>
-      {/* For Authenticated Users */}
+      {/* Signed In */}
       <Route element={<ProtectedRoute session={session} />}>
         <Route element={<Layout />}>
           <Route path="/dashboard" element={<Dashboard />} />
@@ -43,7 +38,7 @@ const App = () => {
           <Route path="/employees/edit/:id" element={<EmployeeMod />} />
         </Route>
       </Route>
-      {/* For Non-Authenticated Users */}
+      {/* Signed Out */}
       <Route element={<PublicRoutes session={session} />}>
         <Route path="/" element={<SignIn />} />
       </Route>

@@ -1,24 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import * as BsIcons from 'react-icons/bs'
+import { SIDEBAR_MENU, PAGE_TITLES } from './utils/constants'
 
 const Layout = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const [sbIsOpen, setSbIsOpen] = useState(false)
-
-  // Page/sub title controller
-  const routes = [
-    { match: (path) => path === '/dashboard', pageTitle: 'Dashboard', subTitle: '' },
-    { match: (path) => path === '/employees', pageTitle: 'Employees', subTitle: 'Employee List' },
-    { match: (path) => path === '/employees/add', pageTitle: 'Employees', subTitle: 'Add Employee' },
-    { match: (path) => path.startsWith('/employees/edit'), pageTitle: 'Employees', subTitle: 'Edit Employee' },
-    { match: (path) => path === '/users', pageTitle: 'Users', subTitle: 'User List' },
-    { match: (path) => path === '/users/add', pageTitle: 'Users', subTitle: 'Add User' },
-    { match: (path) => path.startsWith('/users/edit'), pageTitle: 'Users', subTitle: 'Edit User' },
-  ];
-  const current = routes.find(r => r.match(location.pathname)) || { pageTitle: '', subTitle: '' };
-  const { pageTitle: currentPageTitle, subTitle: currentSubTitle } = current;
+  const current = PAGE_TITLES.find(r => location.pathname.startsWith(r.path.replace(':id', ''))) || { nav1: '', nav2: '' }
+  const { nav1: cNav1, nav2: cNav2 } = current
 
   // Responsive sidebar controller
   useEffect(() => {
@@ -34,17 +24,11 @@ const Layout = () => {
     <>
       <div className="flex w-[100vw] h-[100vh] overflow-hidden">
         <div className="drawer md:drawer-open">
-          <input
-            id="sidebar-toggle"
-            className="drawer-toggle"
-            type="checkbox"
-            onChange={(e) => setSbIsOpen(e.target.checked)}
-            checked={sbIsOpen}
-          />
+          <input id="sidebar-toggle" className="drawer-toggle" type="checkbox" onChange={(e) => setSbIsOpen(e.target.checked)} checked={sbIsOpen} />
           <div className="drawer-content overflow-x-hidden overflow-y-auto">
             <div className="bg-base-100/90 text-base-content sticky top-0 left-0 z-30 flex h-16 w-full justify-center backdrop-blur border-b border-base-300">
               <div id="navbar" className="navbar gap-3 w-full h-16">
-                <label htmlFor="sidebar-toggle" className="btn btn-square btn-ghost text-lg" aria-label="open sidebar">
+                <label htmlFor="sidebar-toggle" className="btn btn-square btn-ghost text-lg">
                   <BsIcons.BsList />
                 </label>
                 <div className="flex items-center w-full h-16 text-lg">
@@ -84,12 +68,12 @@ const Layout = () => {
             </div>
             <div className="w-full md:max-w-[1200px] p-5">
               <div className="flex gap-5">
-                <b className="text-xl">{currentPageTitle}</b>
+                <b className="text-xl">{cNav1}</b>
                 <div className="breadcrumbs text-sm ms-auto">
                   <ul>
                     <li><button><BsIcons.BsLayers /></button></li>
-                    <li><button>{currentPageTitle}</button></li>
-                    {currentSubTitle && <li><button>{currentSubTitle}</button></li>}
+                    <li><button>{cNav1}</button></li>
+                    {cNav2 && <li><button>{cNav2}</button></li>}
                   </ul>
                 </div>
               </div>
@@ -110,7 +94,7 @@ const Layout = () => {
                     <span className="is-drawer-close:hidden">John Doe</span>
                   </button>
                   <div className="md:hidden ms-auto">
-                    <label htmlFor="sidebar-toggle" className="drawer-overlay  btn btn-square btn-ghost text-lg" aria-label="close sidebar">
+                    <label htmlFor="sidebar-toggle" className="drawer-overlay  btn btn-square btn-ghost text-lg">
                       <BsIcons.BsChevronBarLeft />
                     </label>
                   </div>
@@ -118,26 +102,22 @@ const Layout = () => {
               </div>
               <div className="flex-1">
                 <ul className="menu gap-1 w-full">
-                  <li>
-                    <button
-                      className={`is-drawer-close:tooltip is-drawer-close:tooltip-right ${currentPageTitle === 'Dashboard' ? 'menu-active' : ''}`}
-                      data-tip="Dashboard"
-                      onClick={() => navigate('/dashboard')}
-                    >
-                      <BsIcons.BsGrid1X2 />
-                      <span className="is-drawer-close:hidden">Dashboard</span>
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      className={`is-drawer-close:tooltip is-drawer-close:tooltip-right ${currentPageTitle === 'Employees' ? 'menu-active' : ''}`}
-                      data-tip="Employees"
-                      onClick={() => navigate('/employees')}
-                    >
-                      <BsIcons.BsPersonVcard />
-                      <span className="is-drawer-close:hidden">Employees</span>
-                    </button>
-                  </li>
+                  {SIDEBAR_MENU.map((i) => {
+                    const Icon = i.icon
+                    const n1 = location.pathname.startsWith(i.path)
+                    return (
+                      <li key={i.path}>
+                        <button
+                          className={`is-drawer-close:tooltip is-drawer-close:tooltip-right ${n1 ? 'menu-active' : ''}`}
+                          data-tip={i.name}
+                          onClick={() => navigate(i.path)}
+                          >
+                          <Icon />
+                          <span className="is-drawer-close:hidden">{i.name}</span>
+                        </button>
+                      </li>
+                    )
+                  })}
                 </ul>
               </div>
               <div className="flex-none">
@@ -166,9 +146,7 @@ const Layout = () => {
             <button className="btn btn-neutral" onClick={() => navigate('/signout')}>Confirm</button>
           </div>
         </div>
-        <form method="dialog" className="modal-backdrop">
-          <button>close</button>
-        </form>
+        <form method="dialog" className="modal-backdrop"><button>close</button></form>
       </dialog>
     </>
   )

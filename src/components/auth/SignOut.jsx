@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { SupabaseServices } from '../../services/SupabaseServices'
 import LoadingScreen from '../templates/LoadingScreen'
 import { useNavigate } from 'react-router-dom'
+import AuthServices from '../../services/AuthServices'
 
 const SignOut = () => {
   const navigate = useNavigate()
@@ -9,7 +9,10 @@ const SignOut = () => {
 
   useEffect(() => {
     const logout = async () => {
-      await SupabaseServices.auth.signOut()
+      const result = await AuthServices.signOut()
+      if (result?.error) {
+        console.error(result.error)
+      }
       setLoading(false)
       navigate('/')
     }

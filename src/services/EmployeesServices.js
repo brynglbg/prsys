@@ -1,4 +1,4 @@
-import { SupabaseServices } from './SupabaseServices';
+import { SupabaseServices } from './SupabaseServices'
 
 // employees
 export async function getEmployees(){
