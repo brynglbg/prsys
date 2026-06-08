@@ -6,6 +6,8 @@ import { FcGoogle } from 'react-icons/fc'
 import * as BsIcons from 'react-icons/bs'
 
 const SignIn = () => {
+  // const isDev = window.location.hostname === 'localhost';
+  // const redirectTo = isDev ? 'http://localhost:3000' : window.location.origin;
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -27,7 +29,12 @@ const SignIn = () => {
   async function signInWithGoogle() {
     setLoading(true)
 
-    const result = await SupabaseServices.auth.signInWithOAuth({ provider: 'google' })
+    const result = await SupabaseServices.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: window.location.origin
+      }
+    })
 
     if (result.error) {
       setError(result.error.message)
