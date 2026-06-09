@@ -95,10 +95,10 @@ const EmployeeMod = () => {
                 <div className="col-span-12 lg:col-span-3">
                   <div className="overflow-x-auto">
                     <div className="steps steps-horizontal lg:steps-vertical w-full">
-                      <button className={`step step1 ${step >= 1 ? 'step-primary' : ''}`} onClick={() => nextStep(1)}>Personal Information</button>
-                      <button className={`step step2 ${step >= 2 ? 'step-primary' : ''}`} onClick={() => nextStep(2)}>Contact Details</button>
-                      <button className={`step step3 ${step >= 3 ? 'step-primary' : ''}`} onClick={() => nextStep(3)}>Employment Details</button>
-                      <button className={`step step4 ${step >= 4 ? 'step-primary' : ''}`} onClick={() => nextStep(4)}>Others</button>
+                      <button className={`step step1 ${step >= 1 ? 'step-info' : ''}`} onClick={() => nextStep(1)}>Personal Information</button>
+                      <button className={`step step2 ${step >= 2 ? 'step-info' : ''}`} onClick={() => nextStep(2)}>Contact Details</button>
+                      <button className={`step step3 ${step >= 3 ? 'step-info' : ''}`} onClick={() => nextStep(3)}>Employment Details</button>
+                      <button className={`step step4 ${step >= 4 ? 'step-info' : ''}`} onClick={() => nextStep(4)}>Others</button>
                     </div>
                   </div>
                 </div>

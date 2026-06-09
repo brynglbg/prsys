@@ -1,7 +1,7 @@
 import { SupabaseServices } from './SupabaseServices'
 
 // employees
-export async function getEmployees(){
+export async function getEmployees() {
   const { data, error } = await SupabaseServices
     .from('employees')
     .select(`*, employee_departments (*), employee_positions (*)`)
@@ -9,7 +9,7 @@ export async function getEmployees(){
 }
 
 // employee departments
-export async function getEmployeeDepartments(){
+export async function getEmployeeDepartments() {
   const { data, error } = await SupabaseServices
     .from('employee_departments')
     .select(`*`)
@@ -17,7 +17,7 @@ export async function getEmployeeDepartments(){
 }
 
 // employee positions
-export async function getEmployeePositions(){
+export async function getEmployeePositions() {
   const { data, error } = await SupabaseServices
     .from('employee_positions')
     .select(`*`)

@@ -1,7 +1,7 @@
 import { SupabaseServices } from './SupabaseServices';
 
 // profile
-export async function getProfile(){
+export async function getProfile() {
   // get current user
   const { data: userData, error: userError } = await SupabaseServices.auth
     .getUser()

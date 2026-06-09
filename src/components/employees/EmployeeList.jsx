@@ -8,7 +8,7 @@ const EmployeeList = () => {
   const [employees, setEmployees] = useState([])
 
   useEffect(() => {
-    async function fetchEmployees(){
+    async function fetchEmployees() {
       const result = await getEmployees()
       if (result.error) {
         console.log(result.error)

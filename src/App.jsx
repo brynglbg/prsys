@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
 // Protected
 import ProtectedRoute from './routes/ProtectedRoute'
@@ -17,6 +17,8 @@ import PageNotFound from './components/error/PageNotFound'
 import LoadingScreen from './components/templates/LoadingScreen'
 import { useAuth } from './context/AuthContext'
 import { getPageTitle } from './utils/helpers'
+import { PAGES } from './utils/constants'
+import ResetPassword from './components/auth/ResetPassword'
 
 const App = () => {
   const { session, loading } = useAuth()
@@ -32,10 +34,14 @@ const App = () => {
       {/* Signed In */}
       <Route element={<ProtectedRoute session={session} />}>
         <Route element={<Layout />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/employees" element={<EmployeeList />} />
-          <Route path="/employees/add" element={<EmployeeMod />} />
-          <Route path="/employees/edit/:id" element={<EmployeeMod />} />
+          {PAGES.map((p) => (
+            <Fragment key={p.path}>
+              <Route path={p.path} element={<p.element />} />
+              {p.items.map((pi) => (
+                <Route key={pi.path} path={pi.path} element={<pi.element />} />
+              ))}
+            </Fragment>
+          ))}
         </Route>
       </Route>
       {/* Signed Out */}
@@ -44,6 +50,7 @@ const App = () => {
       </Route>
       {/* Global */}
       <Route path="/signout" element={<SignOut />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
       {/* Error */}
       <Route path="*" element={<PageNotFound />} />
     </Routes>

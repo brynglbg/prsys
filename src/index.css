@@ -5,15 +5,14 @@
 
 /* z-index controller */
 .loading-container{ z-index: 9999; }
-#sidebar { z-index: 8999; }
-#navbar { z-index: 7999; }
+#sidebar { z-index: 5199; }
+#navbar { z-index: 5099; }
 
 /* main */
 body {
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  background: rgb(250, 250, 250);
 }
 
 /* daisyUI (Tailwind CSS) custom */
